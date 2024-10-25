@@ -15,7 +15,7 @@ public class ShowController {
     @Autowired
     private ShowService showService;
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<ShowDto> addShow(@RequestBody ShowDto showDto){
         return new ResponseEntity<>(showService.addShow(showDto), HttpStatus.CREATED);
 

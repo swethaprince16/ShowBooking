@@ -1,5 +1,6 @@
 package com.showbooking.models;
 
+import com.showbooking.dto.UserDto;
 import com.showbooking.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,12 +26,15 @@ public class Users {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-//    public static userDto toDto(Users user){
-//        return UserDto.builder()
-//                .username(user.getUsername())
-//                .email(user.getEmail())
-//                .mobile(user.getMobile())
-//                .build();
+    public static UserDto toDto(Users user){
+        return UserDto.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .mobile(user.getMobile())
+                .tickets(user.getTickets())
+                .role(user.getRole())
+                .build();
 
-//    }
+    }
 }

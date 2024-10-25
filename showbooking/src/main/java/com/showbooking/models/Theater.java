@@ -1,5 +1,6 @@
 package com.showbooking.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.showbooking.dto.TheaterDto;
 import jakarta.persistence.*;
 import lombok.*;

@@ -7,6 +7,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -18,12 +19,14 @@ public class ShowSeat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer seatId;
+    @Enumerated(EnumType.STRING)
     private SeatType type;
     private String number;
     private Integer rate;
     private boolean booked;
 
     @ManyToOne
+    @JsonIgnore
     private Show show;
 
     @ManyToOne
@@ -31,5 +34,5 @@ public class ShowSeat {
     private Ticket ticket;
 
     @CreationTimestamp
-    private LocalDateTime bookedAt;
+    private Date bookedAt;
 }
