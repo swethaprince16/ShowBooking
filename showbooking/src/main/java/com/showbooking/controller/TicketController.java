@@ -1,5 +1,6 @@
 package com.showbooking.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.showbooking.dto.BookingDto;
 import com.showbooking.dto.TicketDto;
 import com.showbooking.service.TicketService;
@@ -18,7 +19,7 @@ public class TicketController {
     private TicketService ticketService;
 
     @PostMapping
-    public ResponseEntity<TicketDto> bookTicket(@RequestBody BookingDto bookingDto){
+    public ResponseEntity<TicketDto> bookTicket(@RequestBody BookingDto bookingDto) throws JsonProcessingException {
         return new ResponseEntity<>(ticketService.bookTicket(bookingDto), HttpStatus.OK);
 
     }

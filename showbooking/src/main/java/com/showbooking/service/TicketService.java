@@ -1,6 +1,11 @@
 package com.showbooking.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.showbooking.config.ShowConstants;
 import com.showbooking.dto.BookingDto;
+import com.showbooking.dto.BookingNotificationRequest;
+import com.showbooking.dto.SendMailNotification;
 import com.showbooking.dto.TicketDto;
 import com.showbooking.enums.SeatType;
 import com.showbooking.exception.DataNotFoundException;
@@ -12,9 +17,12 @@ import com.showbooking.repository.ShowRepository;
 import com.showbooking.repository.TicketRepository;
 import com.showbooking.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.concurrent.Future;
 
 @Service
 public class TicketService {
@@ -26,8 +34,12 @@ public class TicketService {
     private UserRepository userRepository;
     @Autowired
     private ShowRepository showRepository;
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplate;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-    public TicketDto bookTicket(BookingDto bookingDto) {
+    public TicketDto bookTicket(BookingDto bookingDto) throws JsonProcessingException {
         Optional<Users> user = userRepository.findById(bookingDto.getUserId());
         if(!user.isPresent()){
             throw new DataNotFoundException(String.format("no user found for id: %d", bookingDto.getUserId()));
@@ -84,6 +96,21 @@ public class TicketService {
         show.get().getTickets().add(ticket);
 
         ticketRepository.save(ticket);
+
+//        BookingNotificationRequest bookingNotificationRequest = BookingNotificationRequest.builder()
+//                .userId(user.get().getId())
+//                .username(user.get().getUsername())
+//                .email(user.get().getEmail())
+//                .ticket(ticket)
+//                .build();
+
+        SendMailNotification sendMailNotification = SendMailNotification.builder()
+                .receiverMailId("swethaprince16@gmail.com")
+                .message(String.format("Booking done for user %s", user.get().getUsername()))
+                .subject(String.format("Booking Confirmation"))
+                .build();
+        Future<SendResult<String, String>> send = kafkaTemplate.send(ShowConstants.TICKET_BOOKING_TOPIC, ticket.getId().toString(), objectMapper.writeValueAsString(sendMailNotification));
+
 
         return Ticket.toDto(ticket);
     }
