@@ -4,6 +4,7 @@ import com.showbooking.enums.Role;
 import com.showbooking.models.Ticket;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Getter
@@ -11,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDto {
+public class UserDto implements Serializable {
     private Integer id;
     private String username;
     private String email;

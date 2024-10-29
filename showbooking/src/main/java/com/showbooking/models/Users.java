@@ -1,10 +1,13 @@
 package com.showbooking.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.showbooking.dto.UserDto;
 import com.showbooking.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
@@ -13,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Users {
+public class Users implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -21,7 +24,8 @@ public class Users {
     private String password;
     private String email;
     private String mobile;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @JsonIgnore
     private List<Ticket> tickets;
     @Enumerated(EnumType.STRING)
     private Role role;

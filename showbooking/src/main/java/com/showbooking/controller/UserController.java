@@ -5,6 +5,7 @@ import com.showbooking.models.Users;
 import com.showbooking.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,16 @@ public class UserController {
     public ResponseEntity<UserDto> getUserDetailsById(@PathVariable Integer id){
         log.info("inside details method!!!");
         return new ResponseEntity<>(userService.getUserDetailsById(id), HttpStatus.OK);
+
+    }
+    @PutMapping
+    public ResponseEntity<UserDto> updateUserDetails(@RequestBody UserDto userDto){
+        return new ResponseEntity<>(userService.updateUserDetails(userDto), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Integer id){
+        userService.deleteUser(id);
 
     }
 }

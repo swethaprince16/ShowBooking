@@ -3,6 +3,7 @@ package com.showbooking.controller;
 import com.showbooking.dto.ShowDto;
 import com.showbooking.service.ShowService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,9 @@ public class ShowController {
 
     }
 
+
+//    @Cacheable(value = "shows", key = "#city")
+//    @Cacheable(value = "shows", key = "#city + '-' + #theaterName + '-' + (#movie ?: '')")
     @GetMapping("/search")
     public ResponseEntity<List<ShowDto>> searchShows(@RequestParam(name = "city", required = true) String city,
                                                      @RequestParam(name = "theaterName", required = true) String theaterName,

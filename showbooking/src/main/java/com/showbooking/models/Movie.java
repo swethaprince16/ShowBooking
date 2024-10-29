@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
@@ -16,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 
-public class Movie {
+public class Movie  implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

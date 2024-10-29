@@ -9,6 +9,7 @@ import com.showbooking.repository.ShowRepository;
 import com.showbooking.repository.ShowSeatRepository;
 import com.showbooking.repository.TheaterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -65,6 +66,7 @@ public class ShowService {
 
     }
 
+    @Cacheable(value = "shows", key = "#city + '-' + #theaterName + '-' + (#movie ?: '')")
     public List<ShowDto> searchShows(String city,String theaterName, String movie) {
         if(!StringUtils.hasText(city)){
             return new ArrayList<>();
